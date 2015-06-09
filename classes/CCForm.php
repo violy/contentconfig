@@ -35,8 +35,8 @@ class CCForm {
 			$empty = Tools::file_get_contents( $this->module->local_path . 'json/empty.json' );
 			file_put_contents( $config_file_path, $empty );
 		}
-		$configurationJSON = file_get_contents( $config_file_path );
-		$this->configuration_data = json_decode( $configurationJSON, true );
+		$configurationJSON = Tools::file_get_contents( $config_file_path );
+		$this->configuration_data = Tools::jsonDecode( $configurationJSON, true );
 
 
 	}
