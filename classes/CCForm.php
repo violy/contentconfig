@@ -32,7 +32,7 @@ class CCForm {
 
 		/* if configuration file don't exists, copy empty file */
 		if ( ! $this->config_file_exists ) {
-			$empty = file_get_contents( __DIR__ . '../json/empty.json' );
+			$empty = Tools::file_get_contents( $this->module->local_path . 'json/empty.json' );
 			file_put_contents( $config_file_path, $empty );
 		}
 		$configurationJSON = file_get_contents( $config_file_path );
