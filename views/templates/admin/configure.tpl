@@ -24,25 +24,10 @@
 *}
 
 <div class="panel">
-	<h3><i class="icon icon-credit-card"></i> {l s='content configuration' mod='contentconfiguration'}</h3>
-	<p>
-		<strong>{l s='Here is my new generic module!' mod='contentconfiguration'}</strong><br />
-		{l s='Thanks to PrestaShop, now I have a great module.' mod='contentconfiguration'}<br />
-		{l s='I can configure it using the following configuration form.' mod='contentconfiguration'}
-	</p>
-	<br />
-	<p>
-		{l s='This module will boost your sales!' mod='contentconfiguration'}
-	</p>
-</div>
-
-<div class="panel">
-	<h3><i class="icon icon-tags"></i> {l s='Documentation' mod='contentconfiguration'}</h3>
-	<p>
-		&raquo; {l s='You can get a PDF documentation to configure this module' mod='contentconfiguration'} :
-		<ul>
-			<li><a href="#" target="_blank">{l s='English' mod='contentconfiguration'}</a></li>
-			<li><a href="#" target="_blank">{l s='French' mod='contentconfiguration'}</a></li>
-		</ul>
-	</p>
+	<h3><i class="icon icon-cog"></i> {l s='content configuration' mod='contentconfiguration'}</h3>
+	<div class="row">
+		<p class="col-md-8">
+			{l s='Welcome to content configuration module.' mod='contentconfiguration'}
+		</p>
+	</div>
 </div>

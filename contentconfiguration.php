@@ -27,9 +27,15 @@
 if (!defined('_PS_VERSION_'))
 	exit;
 
+include_once 'classes/CCForm.php';
+include_once 'classes/CCField.php';
+
 class Contentconfiguration extends Module
 {
 	protected $config_form = false;
+	protected $config_file_exists = false;
+	protected $config;
+	protected $db;
 
 	public function __construct()
 	{
@@ -48,6 +54,8 @@ class Contentconfiguration extends Module
 
 		$this->displayName = $this->l('content configuration');
 		$this->description = $this->l('developer module. manage custom fields');
+
+		$this->db = Db::getInstance();
 	}
 
 	/**
@@ -80,11 +88,16 @@ class Contentconfiguration extends Module
 	 */
 	public function getContent()
 	{
+
+		$this->form = new CCForm($this);
+
 		/**
 		 * If values have been submitted in the form, process.
 		 */
 		if (((bool)Tools::isSubmit('submitContentconfigurationModule')) == true)
 			$this->postProcess();
+
+
 
 		$this->context->smarty->assign('module_dir', $this->_path);
 
@@ -113,76 +126,69 @@ class Contentconfiguration extends Module
 		$helper->token = Tools::getAdminTokenLite('AdminModules');
 
 		$helper->tpl_vars = array(
-			'fields_value' => $this->getConfigFormValues(), /* Add values for your inputs */
+			'fields_value' => $this->form->getFormValues(), /* Add values for your inputs */
 			'languages' => $this->context->controller->getLanguages(),
 			'id_language' => $this->context->language->id,
 		);
 
-		return $helper->generateForm(array($this->getConfigForm()));
+		return $helper->generateForm(array( $this->form->toArray()));
 	}
 
 	/**
 	 * Create the structure of your form.
 	 */
-	protected function getConfigForm()
+	protected function getForm()
 	{
 		return array(
 			'form' => array(
 				'legend' => array(
-				'title' => $this->l('Settings'),
-				'icon' => 'icon-cogs',
+					'title' => $this->l( 'Contents' ),
+					'icon'  => 'icon-sliders',
 				),
-				'input' => array(
-					array(
-						'type' => 'switch',
-						'label' => $this->l('Live mode'),
-						'name' => 'CONTENTCONFIGURATION_LIVE_MODE',
-						'is_bool' => true,
-						'desc' => $this->l('Use this module in live mode'),
-						'values' => array(
-							array(
-								'id' => 'active_on',
-								'value' => true,
-								'label' => $this->l('Enabled')
-							),
-							array(
-								'id' => 'active_off',
-								'value' => false,
-								'label' => $this->l('Disabled')
-							)
-						),
-					),
-					array(
-						'col' => 3,
-						'type' => 'text',
-						'prefix' => '<i class="icon icon-envelope"></i>',
-						'desc' => $this->l('Enter a valid email address'),
-						'name' => 'CONTENTCONFIGURATION_ACCOUNT_EMAIL',
-						'label' => $this->l('Email'),
-					),
-					array(
-						'type' => 'password',
-						'name' => 'CONTENTCONFIGURATION_ACCOUNT_PASSWORD',
-						'label' => $this->l('Password'),
-					),
+				'input'  => array(
+
 				),
 				'submit' => array(
-					'title' => $this->l('Save'),
+					'title' => $this->l( 'Save' ),
 				),
-			),
+			)
 		);
 	}
 
-	/**
-	 * Set values for the inputs.
-	 */
-	protected function getConfigFormValues()
-	{
-		return array(
-			'CONTENTCONFIGURATION_LIVE_MODE' => Configuration::get('CONTENTCONFIGURATION_LIVE_MODE', true),
-			'CONTENTCONFIGURATION_ACCOUNT_EMAIL' => Configuration::get('CONTENTCONFIGURATION_ACCOUNT_EMAIL', 'contact@prestashop.com'),
-			'CONTENTCONFIGURATION_ACCOUNT_PASSWORD' => Configuration::get('CONTENTCONFIGURATION_ACCOUNT_PASSWORD', null),
+	public function getFieldValue($field_name,$id_lang=false){
+		$query = 'SELECT * FROM `' . _DB_PREFIX_ . 'cc_value` WHERE name = \'' . $field_name . '\' ';
+		if($id_lang){
+			$query .= ' AND id_lang = \''.$id_lang.'\'';
+		}
+		$row = $this->db->getRow( $query);
+		return $row ? $row['value'] : NULL;
+	}
+
+	public function updateFieldValue($field_name,$value,$id_lang=false){
+		$currentValue = $this->getFieldValue($field_name, $id_lang);
+		$insert = array(
+			'value' => $value,
 		);
+		$where = 'name = \'' . $field_name . '\'';
+		if ( $id_lang ) {
+			$where .= ' AND id_lang = ' . $id_lang;
+			$insert['id_lang'] = $id_lang;
+		}
+
+		if(! $currentValue){
+			if($value){
+				$insert['name'] = $field_name;
+				$insertRow = $this->db->insert( 'cc_value', $insert );
+			}
+		}else{
+			if ( $id_lang ) {
+				//die( "update $field_name $value" );
+			}
+			if ( $value ) {
+
+				$update = $this->db->update( 'cc_value', $insert, $where );
+			}
+		}
 	}
 
 	/**
@@ -190,10 +196,20 @@ class Contentconfiguration extends Module
 	 */
 	protected function postProcess()
 	{
-		$form_values = $this->getConfigFormValues();
+		foreach ( $this->form->getFields() as $field){
 
-		foreach (array_keys($form_values) as $key)
-			Configuration::updateValue($key, Tools::getValue($key));
+			if($field->lang){
+				foreach(Language::getLanguages() as $lang){
+					$this->updateFieldValue($field->name, Tools::getValue( $field->name.'_'. $lang['id_lang'] ), $lang['id_lang']);
+				}
+			}else{
+				$this->updateFieldValue( $field->name, Tools::getValue( $field->name ) );
+			}
+
+
+			//$this->db::updateValue( $key, Tools::getValue( $key ) );
+		}
+			//$this->db::updateValue($key, Tools::getValue($key));
 	}
 
 	/**
@@ -201,7 +217,7 @@ class Contentconfiguration extends Module
 	*/
 	public function hookBackOfficeHeader()
 	{
-		if (Tools::getValue('module_name') == $this->name)
+		if (Tools::getValue('configure') == $this->name)
 		{
 			$this->context->controller->addJS($this->_path.'views/js/back.js');
 			$this->context->controller->addCSS($this->_path.'views/css/back.css');
