@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<module>
+	<name>contentconfiguration</name>
+	<displayName><![CDATA[content configuration]]></displayName>
+	<version><![CDATA[0.0.1]]></version>
+	<description><![CDATA[developer module. manage custom fields]]></description>
+	<author><![CDATA[Arthur Violy]]></author>
+	<tab><![CDATA[content_management]]></tab>
+	<is_configurable>1</is_configurable>
+	<need_instance>1</need_instance>
+</module>
