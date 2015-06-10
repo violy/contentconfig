@@ -91,21 +91,24 @@ class CCForm {
 		return $this->fields;
 	}
 
-	public function getValue($field_name){
+	public function getValue($field_name)
+	{
 		$field = $this->getField($field_name);
 		if (!isset($field))
 			return null;
 		return $field->getValue();
 	}
 
-	public function getField($field_name){
-		for ($i=0; $i<count($this->fields); $i++)
+	public function getField($field_name)
+	{
+		$fields_count = count($this->fields);
+		for ($i = 0; $i < $fields_count; $i++)
 		{
 			$field = $this->fields[$i];
-			if ($field->name == $field_name){
+			if ($field->name == $field_name)
 				return $field;
-			}
 		}
+		return null;
 	}
 
 	public function getFormValues()
