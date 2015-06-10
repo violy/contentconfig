@@ -30,7 +30,7 @@ if (!defined('_PS_VERSION_'))
 include_once 'classes/CCForm.php';
 include_once 'classes/CCField.php';
 
-class Contentconfiguration extends Module
+class Contentconfig extends Module
 {
 	protected $config_form = false;
 	protected $config_file_exists = false;
@@ -39,7 +39,7 @@ class Contentconfiguration extends Module
 
 	public function __construct()
 	{
-		$this->name = 'contentconfiguration';
+		$this->name = 'contentconfig';
 		$this->tab = 'content_management';
 		$this->version = '0.0.1';
 		$this->author = 'Arthur Violy';
@@ -64,8 +64,6 @@ class Contentconfiguration extends Module
 	 */
 	public function install()
 	{
-		Configuration::updateValue('CONTENTCONFIGURATION_LIVE_MODE', false);
-
 		include( dirname( __FILE__ ) . '/sql/install.php' );
 
 		return parent::install() &&
@@ -76,8 +74,6 @@ class Contentconfiguration extends Module
 
 	public function uninstall()
 	{
-		Configuration::deleteByName('CONTENTCONFIGURATION_LIVE_MODE');
-
 		include( dirname( __FILE__ ) . '/sql/uninstall.php' );
 
 		return parent::uninstall();
@@ -94,7 +90,7 @@ class Contentconfiguration extends Module
 		/**
 		 * If values have been submitted in the form, process.
 		 */
-		if (((bool)Tools::isSubmit('submitContentconfigurationModule')) == true)
+		if (((bool)Tools::isSubmit('submitContentconfigModule')) == true)
 			$this->postProcess();
 
 
@@ -120,7 +116,7 @@ class Contentconfiguration extends Module
 		$helper->allow_employee_form_lang = Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG', 0);
 
 		$helper->identifier = $this->identifier;
-		$helper->submit_action = 'submitContentconfigurationModule';
+		$helper->submit_action = 'submitContentconfigModule';
 		$helper->currentIndex = $this->context->link->getAdminLink('AdminModules', false)
 			.'&configure='.$this->name.'&tab_module='.$this->tab.'&module_name='.$this->name;
 		$helper->token = Tools::getAdminTokenLite('AdminModules');

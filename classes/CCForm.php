@@ -27,7 +27,7 @@ class CCForm {
 
 	protected function loadJsonFile(){
 		/* Load configuration file */
-		$config_file_path = _PS_THEME_DIR_ . 'contentconfiguration.json';
+		$config_file_path = _PS_THEME_DIR_ . 'contentconfig.json';
 		$this->config_file_exists = file_exists( $config_file_path );
 
 		/* if configuration file don't exists, copy empty file */

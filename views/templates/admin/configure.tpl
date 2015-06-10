@@ -24,10 +24,10 @@
 *}
 
 <div class="panel">
-	<h3><i class="icon icon-cog"></i> {l s='content configuration' mod='contentconfiguration'}</h3>
+	<h3><i class="icon icon-cog"></i> {l s='content configuration' mod='contentconfig'}</h3>
 	<div class="row">
 		<p class="col-md-8">
-			{l s='Welcome to content configuration module.' mod='contentconfiguration'}
+			{l s='Welcome to content configuration module.' mod='contentconfig'}
 		</p>
 	</div>
 </div>

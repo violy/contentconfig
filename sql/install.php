@@ -27,13 +27,13 @@
 $sql = array();
 
 $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'cc_value` (
-    `id_contentconfiguration` int(11) NOT NULL AUTO_INCREMENT,
+    `id_contentconfig` int(11) NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(20) NOT NULL,
     `value` text NOT NULL,
     `date_add` datetime NOT NULL,
     `date_upd` datetime NOT NULL,
     `id_lang` int(11) NOT NULL DEFAULT 0 ,
-    PRIMARY KEY  (`id_contentconfiguration`)
+    PRIMARY KEY  (`id_contentconfig`)
 ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
 
 foreach ($sql as $query)
