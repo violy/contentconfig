@@ -32,23 +32,19 @@ class CCField {
 	public $wysiwyg = false;
 	public $tab = 'default';
 
-	public function __construct( &$input, $module ) {
-
+	public function __construct(&$input, $module)
+	{
 		$this->module = $module;
 		$this->input = $input;
 
-		if ( ! isset( $input['tab'] ) ) {
+		if (!isset($input['tab']))
 			$input['tab'] = $this->tab;
-		}
 
-		foreach($input as $key=>$value){
+		foreach ($input as $key => $value)
 			$this->$key = $value;
-		}
 
-		if($this->wysiwyg){
+		if ($this->wysiwyg)
 			$input['autoload_rte'] = true;
-		}
-
 
 	}
 

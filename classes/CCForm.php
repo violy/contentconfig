@@ -31,73 +31,76 @@ class CCForm {
 	protected $fields = array();
 	public $form;
 
-	public function __construct($module){
-
+	public function __construct($module)
+	{
 		$this->module = $module;
 		$this->loadJsonFile();
 		$this->cleanFields();
 		$this->setupForm();
-
 	}
 
-	public function l($args){
+	public function l($args)
+	{
 		return $this->module->l($args);
 	}
 
-	protected function loadJsonFile(){
+	protected function loadJsonFile()
+	{
 		/* Load configuration file */
-		$config_file_path = _PS_THEME_DIR_ . 'contentconfig.json';
-		$this->config_file_exists = file_exists( $config_file_path );
+		$config_file_path = _PS_THEME_DIR_.'contentconfig.json';
+		$this->config_file_exists = file_exists($config_file_path);
 
 		/* if configuration file don't exists, copy empty file */
-		if ( ! $this->config_file_exists ) {
-			$empty = Tools::file_get_contents( $this->module->local_path . 'json/empty.json' );
-			file_put_contents( $config_file_path, $empty );
+		if (!$this->config_file_exists)
+		{
+			$empty = Tools::file_get_contents($this->module->local_path.'json/empty.json');
+			file_put_contents($config_file_path, $empty);
 		}
-		$configuration_json = Tools::file_get_contents( $config_file_path );
-		$this->configuration_data = Tools::jsonDecode( $configuration_json, true );
+		$configuration_json = Tools::file_get_contents($config_file_path);
+		$this->configuration_data = Tools::jsonDecode($configuration_json, true);
 
 	}
 
-	protected function cleanFields(){
+	protected function cleanFields()
+	{
+		foreach ($this->configuration_data['input'] as &$field)
+			$this->fields[] = new CCField($field, $this->module);
 
-		foreach ( $this->configuration_data['input'] as  &$field ) {
-			$this->fields[] = new CCField($field,$this->module);
-		}
-
-		if(count($this->configuration_data['tabs'])<2){
+		if (count($this->configuration_data['tabs']) < 2)
 			unset ($this->configuration_data['tabs']);
-		}
 	}
 
-	protected function setupForm(){
-
+	protected function setupForm()
+	{
 		$base = array(
 			'id' => 'cc_form',
 			'legend' => array(
-				'title' => $this->l( 'Contents' ),
+				'title' => $this->l('Contents'),
 				'icon'  => 'icon-sliders',
 			),
 			'submit' => array(
-				'title' => $this->l( 'Save' ),
+				'title' => $this->l('Save'),
 			)
 		);
 
-		$this->form = array_merge($base,$this->configuration_data);
+		$this->form = array_merge($base, $this->configuration_data);
 	}
 
-	public function getFields(){
+	public function getFields()
+	{
 		return $this->fields;
 	}
 
-	public function getFormValues(){
+	public function getFormValues()
+	{
 		$values = array();
 
-		foreach($this->fields as $field){
-			if($field->lang)
+		foreach ($this->fields as $field)
+		{
+			if ($field->lang)
 			{
-				$values[ $field->name ] = array();
-				foreach(Language::getLanguages() as $language)
+				$values[$field->name] = array();
+				foreach (Language::getLanguages() as $language)
 				{
 					$value = $this->module->getFieldValue($field->name, $language['id_lang']);
 					$values[$field->name][$language['id_lang']] = $value;
@@ -113,7 +116,8 @@ class CCForm {
 		return $values;
 	}
 
-	public function toArray(){
+	public function toArray()
+	{
 		return array('form'=>$this->form);
 	}
 

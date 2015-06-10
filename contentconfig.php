@@ -64,7 +64,7 @@ class Contentconfig extends Module
 	 */
 	public function install()
 	{
-		include( dirname( __FILE__ ) . '/sql/install.php' );
+		include(dirname(__FILE__).'/sql/install.php');
 
 		return parent::install() &&
 			$this->registerHook('header') &&
@@ -74,7 +74,7 @@ class Contentconfig extends Module
 
 	public function uninstall()
 	{
-		include( dirname( __FILE__ ) . '/sql/uninstall.php' );
+		include(dirname(__FILE__).'/sql/uninstall.php');
 
 		return parent::uninstall();
 	}
@@ -84,7 +84,6 @@ class Contentconfig extends Module
 	 */
 	public function getContent()
 	{
-
 		$this->form = new CCForm($this);
 
 		/**
@@ -125,7 +124,7 @@ class Contentconfig extends Module
 			'id_language' => $this->context->language->id,
 		);
 
-		return $helper->generateForm(array( $this->form->toArray()));
+		return $helper->generateForm(array($this->form->toArray()));
 	}
 
 	/**
@@ -136,48 +135,53 @@ class Contentconfig extends Module
 		return array(
 			'form' => array(
 				'legend' => array(
-					'title' => $this->l( 'Contents' ),
+					'title' => $this->l('Contents'),
 					'icon'  => 'icon-sliders',
 				),
 				'input'  => array(
 
 				),
 				'submit' => array(
-					'title' => $this->l( 'Save' ),
+					'title' => $this->l('Save'),
 				),
 			)
 		);
 	}
 
-	public function getFieldValue($field_name,$id_lang=false){
-		$query = 'SELECT * FROM `' . _DB_PREFIX_ . 'cc_value` WHERE name = \'' . $field_name . '\' ';
-		if($id_lang){
+	public function getFieldValue($field_name, $id_lang = false)
+	{
+		$query = 'SELECT * FROM `'._DB_PREFIX_.'cc_value` WHERE name = \''.$field_name.'\' ';
+		if ($id_lang)
 			$query .= ' AND id_lang = \''.$id_lang.'\'';
-		}
-		$row = $this->db->getRow( $query);
-		return $row ? $row['value'] : NULL;
+		$row = $this->db->getRow($query);
+		return $row ? $row['value'] : null;
 	}
 
-	public function updateFieldValue($field_name,$value,$id_lang=false){
+	public function updateFieldValue($field_name, $value, $id_lang = false)
+	{
 		$current_value = $this->getFieldValue($field_name, $id_lang);
 		$insert = array(
 			'value' => $value,
 		);
-		$where = 'name = \'' . $field_name . '\'';
-		if ( $id_lang ) {
-			$where .= ' AND id_lang = ' . $id_lang;
+		$where = 'name = \''.$field_name.'\'';
+		if ($id_lang)
+		{
+			$where .= ' AND id_lang = '.$id_lang;
 			$insert['id_lang'] = $id_lang;
 		}
 
-		if(! $current_value){
-			if($value){
+		if (!$current_value)
+		{
+			if ($value)
+			{
 				$insert['name'] = $field_name;
-				$this->db->insert( 'cc_value', $insert );
+				$this->db->insert('cc_value', $insert);
 			}
-		}else{
-			if ( $value ) {
-				$this->db->update( 'cc_value', $insert, $where );
-			}
+		}
+		else
+		{
+			if ($value)
+				$this->db->update('cc_value', $insert, $where);
 		}
 	}
 
@@ -188,18 +192,14 @@ class Contentconfig extends Module
 	{
 		foreach ($this->form->getFields() as $field)
 		{
-			if ($field->lang===true)
+			if ($field->lang === true)
 			{
-				foreach(Language::getLanguages() as $lang)
-				{
-					$this->updateFieldValue($field->name, Tools::getValue( $field->name.'_'. $lang['id_lang'] ), $lang['id_lang']);
-				}
+				foreach (Language::getLanguages() as $lang)
+					$this->updateFieldValue($field->name, Tools::getValue($field->name.'_'.$lang['id_lang']), $lang['id_lang']);
 			}
 			else
-			{
-				$this->updateFieldValue( $field->name, Tools::getValue( $field->name ) );
-			}
-			//$this->db::updateValue( $key, Tools::getValue( $key ) );
+				$this->updateFieldValue($field->name, Tools::getValue($field->name));
+			//$this->db::updateValue($key, Tools::getValue($key));
 		}
 			//$this->db::updateValue($key, Tools::getValue($key));
 	}
