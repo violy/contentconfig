@@ -56,6 +56,9 @@ class Contentconfig extends Module
 		$this->description = $this->l('developer module. manage custom fields');
 
 		$this->db = Db::getInstance();
+
+		$this->form = new CCForm($this);
+
 	}
 
 	/**
@@ -84,8 +87,6 @@ class Contentconfig extends Module
 	 */
 	public function getContent()
 	{
-		$this->form = new CCForm($this);
-
 		/**
 		 * If values have been submitted in the form, process.
 		 */
@@ -228,5 +229,24 @@ class Contentconfig extends Module
 	public function hookDisplayHeader()
 	{
 		/* Place your code here. */
+		$this->context->smarty->assign(array('cc'=>$this));
+	}
+
+	/**
+	 * Get the local path of the module
+	 */
+	public function getLocalPath()
+	{
+		return $this->local_path;
+	}
+
+	public function getContext()
+	{
+		return $this->context;
+	}
+
+	public function get($field_name)
+	{
+		return $this->form->getValue($field_name);
 	}
 }

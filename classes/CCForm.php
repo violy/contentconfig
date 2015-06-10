@@ -53,7 +53,7 @@ class CCForm {
 		/* if configuration file don't exists, copy empty file */
 		if (!$this->config_file_exists)
 		{
-			$empty = Tools::file_get_contents($this->module->local_path.'json/empty.json');
+			$empty = Tools::file_get_contents($this->module->getLocalPath().'json/empty.json');
 			file_put_contents($config_file_path, $empty);
 		}
 		$configuration_json = Tools::file_get_contents($config_file_path);
@@ -89,6 +89,23 @@ class CCForm {
 	public function getFields()
 	{
 		return $this->fields;
+	}
+
+	public function getValue($field_name){
+		$field = $this->getField($field_name);
+		if (!isset($field))
+			return null;
+		return $field->getValue();
+	}
+
+	public function getField($field_name){
+		for ($i=0; $i<count($this->fields); $i++)
+		{
+			$field = $this->fields[$i];
+			if ($field->name == $field_name){
+				return $field;
+			}
+		}
 	}
 
 	public function getFormValues()

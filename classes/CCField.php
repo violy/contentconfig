@@ -48,4 +48,9 @@ class CCField {
 
 	}
 
+	public function getValue()
+	{
+		return $this->module->getFieldValue($this->name, $this->lang ? $this->module->getContext()->language->id : null);
+	}
+
 }
