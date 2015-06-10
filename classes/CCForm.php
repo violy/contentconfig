@@ -54,9 +54,8 @@ class CCForm {
 			$empty = Tools::file_get_contents( $this->module->local_path . 'json/empty.json' );
 			file_put_contents( $config_file_path, $empty );
 		}
-		$configurationJSON = Tools::file_get_contents( $config_file_path );
-		$this->configuration_data = Tools::jsonDecode( $configurationJSON, true );
-
+		$configuration_json = Tools::file_get_contents( $config_file_path );
+		$this->configuration_data = Tools::jsonDecode( $configuration_json, true );
 
 	}
 
@@ -95,15 +94,19 @@ class CCForm {
 		$values = array();
 
 		foreach($this->fields as $field){
-			if($field->lang){
+			if($field->lang)
+			{
 				$values[ $field->name ] = array();
-				foreach( Language::getLanguages() as $language){
-					$value = $this->module->getFieldValue( $field->name, $language['id_lang'] );
-					$values[ $field->name ][$language['id_lang']] = $value;
+				foreach(Language::getLanguages() as $language)
+				{
+					$value = $this->module->getFieldValue($field->name, $language['id_lang']);
+					$values[$field->name][$language['id_lang']] = $value;
 				}
-			}else{
-				$value = $this->module->getFieldValue( $field->name );
-				$values[ $field->name ] = $value;
+			}
+			else
+			{
+				$value = $this->module->getFieldValue($field->name);
+				$values[$field->name] = $value;
 			}
 		}
 

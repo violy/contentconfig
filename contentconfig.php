@@ -93,8 +93,6 @@ class Contentconfig extends Module
 		if (((bool)Tools::isSubmit('submitContentconfigModule')) == true)
 			$this->postProcess();
 
-
-
 		$this->context->smarty->assign('module_dir', $this->_path);
 
 		$output = $this->context->smarty->fetch($this->local_path.'views/templates/admin/configure.tpl');
@@ -161,7 +159,7 @@ class Contentconfig extends Module
 	}
 
 	public function updateFieldValue($field_name,$value,$id_lang=false){
-		$currentValue = $this->getFieldValue($field_name, $id_lang);
+		$current_value = $this->getFieldValue($field_name, $id_lang);
 		$insert = array(
 			'value' => $value,
 		);
@@ -171,7 +169,7 @@ class Contentconfig extends Module
 			$insert['id_lang'] = $id_lang;
 		}
 
-		if(! $currentValue){
+		if(! $current_value){
 			if($value){
 				$insert['name'] = $field_name;
 				$this->db->insert( 'cc_value', $insert );
@@ -188,17 +186,19 @@ class Contentconfig extends Module
 	 */
 	protected function postProcess()
 	{
-		foreach ( $this->form->getFields() as $field){
-
-			if($field->lang){
-				foreach(Language::getLanguages() as $lang){
+		foreach ($this->form->getFields() as $field)
+		{
+			if ($field->lang===true)
+			{
+				foreach(Language::getLanguages() as $lang)
+				{
 					$this->updateFieldValue($field->name, Tools::getValue( $field->name.'_'. $lang['id_lang'] ), $lang['id_lang']);
 				}
-			}else{
+			}
+			else
+			{
 				$this->updateFieldValue( $field->name, Tools::getValue( $field->name ) );
 			}
-
-
 			//$this->db::updateValue( $key, Tools::getValue( $key ) );
 		}
 			//$this->db::updateValue($key, Tools::getValue($key));
