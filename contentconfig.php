@@ -174,15 +174,11 @@ class Contentconfig extends Module
 		if(! $currentValue){
 			if($value){
 				$insert['name'] = $field_name;
-				$insertRow = $this->db->insert( 'cc_value', $insert );
+				$this->db->insert( 'cc_value', $insert );
 			}
 		}else{
-			if ( $id_lang ) {
-				//die( "update $field_name $value" );
-			}
 			if ( $value ) {
-
-				$update = $this->db->update( 'cc_value', $insert, $where );
+				$this->db->update( 'cc_value', $insert, $where );
 			}
 		}
 	}

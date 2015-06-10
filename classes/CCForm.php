@@ -43,7 +43,7 @@ class CCForm {
 
 	protected function cleanFields(){
 
-		foreach ( $this->configuration_data['input'] as $key => &$field ) {
+		foreach ( $this->configuration_data['input'] as  &$field ) {
 			$this->fields[] = new CCField($field,$this->module);
 		}
 
@@ -75,7 +75,7 @@ class CCForm {
 	public function getFormValues(){
 		$values = array();
 
-		foreach($this->fields as $key=>$field){
+		foreach($this->fields as $field){
 			if($field->lang){
 				$values[ $field->name ] = array();
 				foreach( Language::getLanguages() as $language){
