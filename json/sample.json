@@ -1,0 +1,87 @@
+{
+	"tabs": {
+		"default": "main settings",
+		"textarea": "textarea"
+	},
+	"input": [
+		{
+			"type": "text",
+			"name": "test",
+			"label": "configuration traduite",
+			"lang": true,
+			"required": true
+		},
+		{
+			"type": "text",
+			"name": "configuration",
+			"label": "configuration international",
+			"required": true
+		},
+		{
+			"type": "textarea",
+			"label": "textarea",
+			"name": "textarea_1",
+			"lang": true,
+			"required": false,
+			"tab": "textarea"
+		},
+		{
+			"type": "textarea",
+			"label": "textarea 2",
+			"name": "textarea_2",
+			"required": false,
+			"tab": "textarea"
+		},
+		{
+			"type": "textarea",
+			"label": "textarea 3",
+			"name": "textarea_3",
+			"autoload_rte": true,
+			"tab": "textarea",
+			"lang": true,
+			"required": false
+		},
+		{
+			"type": "textarea",
+			"label": "textarea 4",
+			"name": "textarea_4",
+			"autoload_rte": true,
+			"tab": "textarea",
+			"required": true
+		},
+		{
+			"type": "select",
+			"name": "select",
+			"label": "select",
+			"options": {
+				"query": [
+					{"value": "0", "label": "ok"},
+					{"value": "1", "label": "not ok"},
+					{"value": "2", "label": "why not ?"}
+				],
+				"id": "value",
+				"name": "label"
+			},
+			"lang": true
+
+		},
+		{
+			"type": "switch",
+			"label": "switch",
+			"name": "switch",
+			"values": [
+				{
+					"id": "value_1",
+					"value": 1,
+					"label": "yes"
+				},
+				{
+					"id": "value_2",
+					"value": 2,
+					"label": "no"
+				}
+			]
+		}
+
+	]
+}
