@@ -128,27 +128,6 @@ class Contentconfig extends Module
 		return $helper->generateForm(array($this->form->toArray()));
 	}
 
-	/**
-	 * Create the structure of your form.
-	 */
-	protected function getForm()
-	{
-		return array(
-			'form' => array(
-				'legend' => array(
-					'title' => $this->l('Contents'),
-					'icon'  => 'icon-sliders',
-				),
-				'input'  => array(
-
-				),
-				'submit' => array(
-					'title' => $this->l('Save'),
-				),
-			)
-		);
-	}
-
 	public function getFieldValue($field_name, $id_lang = false)
 	{
 		$query = 'SELECT * FROM `'._DB_PREFIX_.'cc_value` WHERE name = \''.$field_name.'\' ';
@@ -211,10 +190,7 @@ class Contentconfig extends Module
 	public function hookBackOfficeHeader()
 	{
 		if (Tools::getValue('configure') == $this->name)
-		{
 			$this->context->controller->addJS($this->_path.'views/js/back.js');
-			$this->context->controller->addCSS($this->_path.'views/css/back.css');
-		}
 	}
 
 	/**
@@ -222,14 +198,7 @@ class Contentconfig extends Module
 	 */
 	public function hookHeader()
 	{
-		$this->context->controller->addJS($this->_path.'/views/js/front.js');
-		$this->context->controller->addCSS($this->_path.'/views/css/front.css');
-	}
-
-	public function hookDisplayHeader()
-	{
-		/* Place your code here. */
-		$this->context->smarty->assign(array('cc'=>$this));
+		$this->context->smarty->assign(array('cc' => $this));
 	}
 
 	/**
