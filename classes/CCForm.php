@@ -126,6 +126,11 @@ class CCForm {
 					$values[$field->name][$language['id_lang']] = $value;
 				}
 			}
+			elseif ($field->is_array)
+			{
+				$raw_value = $this->module->getFieldValue($field->name);
+				$values[$field->name] = unserialize($raw_value);
+			}
 			else
 			{
 				$value = $this->module->getFieldValue($field->name);

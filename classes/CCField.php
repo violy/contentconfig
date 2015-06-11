@@ -27,22 +27,41 @@
 class CCField {
 
 	protected $module;
-	protected $input;
+	public $input;
 	public $lang = false;
 	public $wysiwyg = false;
 	public $tab = 'default';
+	public $is_array = false;
 
 	public function __construct(&$input, $module)
 	{
 		$this->module = $module;
-		$this->input = $input;
+		$this->input = &$input;
+		foreach ($input as $key => $value)
+			$this->$key = $value;
+
+		switch ($this->type)
+		{
+			case 'categories' :
+				$this->tree = &$input['tree'];
+				$this->is_array = $this->tree['use_checkbox'] ? true:false;
+				break;
+		}
+
+		if ($this->type == 'categories')
+		{
+			$root_category = isset($this->input['tree']['root_category']) ? (integer)$this->input['tree']['root_category'] : 1;
+			$root_category = $root_category > 0 ? $root_category : 2;
+			$this->input['tree']['root_category'] = $root_category;
+			$selected_categories = unserialize($this->module->getFieldValue($this->name));
+			$selected_categories = $selected_categories ? $selected_categories : [];
+			$this->input['tree']['selected_categories'] = $selected_categories;
+		}
 
 		if (!isset($input['tab']))
 			$input['tab'] = $this->tab;
 
-		foreach ($input as $key => $value)
-			$this->$key = $value;
-
+		/* alias for wysiwyg editor */
 		if ($this->wysiwyg)
 			$input['autoload_rte'] = true;
 
@@ -50,7 +69,8 @@ class CCField {
 
 	public function getValue()
 	{
-		return $this->module->getFieldValue($this->name, $this->lang ? $this->module->getContext()->language->id : null);
+		$raw_value = $this->module->getFieldValue($this->name, $this->lang ? $this->module->getContext()->language->id : null);
+		return $this->is_array ? unserialize($raw_value) : $raw_value;
 	}
 
 }

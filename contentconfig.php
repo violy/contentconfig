@@ -177,11 +177,17 @@ class Contentconfig extends Module
 				foreach (Language::getLanguages() as $lang)
 					$this->updateFieldValue($field->name, Tools::getValue($field->name.'_'.$lang['id_lang']), $lang['id_lang']);
 			}
+			if ($field->type == 'categories')
+			{
+				$selected_categories = Tools::getValue($field->name);
+				$selected_categories = $selected_categories ? $selected_categories : [];
+				$field->tree['selected_categories'] = $selected_categories;
+			}
+			if ($field->is_array)
+				$this->updateFieldValue($field->name, serialize(Tools::getValue($field->name)));
 			else
 				$this->updateFieldValue($field->name, Tools::getValue($field->name));
-			//$this->db::updateValue($key, Tools::getValue($key));
 		}
-			//$this->db::updateValue($key, Tools::getValue($key));
 	}
 
 	/**
