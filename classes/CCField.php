@@ -54,7 +54,7 @@ class CCField {
 			$root_category = $root_category > 0 ? $root_category : 2;
 			$this->input['tree']['root_category'] = $root_category;
 			$selected_categories = unserialize($this->module->getFieldValue($this->name));
-			$selected_categories = $selected_categories ? $selected_categories : [];
+			$selected_categories = $selected_categories ? $selected_categories : array();
 			$this->input['tree']['selected_categories'] = $selected_categories;
 		}
 

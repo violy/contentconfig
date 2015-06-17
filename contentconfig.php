@@ -180,7 +180,7 @@ class Contentconfig extends Module
 			if ($field->type == 'categories')
 			{
 				$selected_categories = Tools::getValue($field->name);
-				$selected_categories = $selected_categories ? $selected_categories : [];
+				$selected_categories = $selected_categories ? $selected_categories : array();
 				$field->tree['selected_categories'] = $selected_categories;
 			}
 			if ($field->is_array)
