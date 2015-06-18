@@ -26,7 +26,8 @@
 * to avoid any conflicts with others containers.
 */
 $(document).ready(function(){
-	$('[name=cc_context]').change(function(){
+	var moduleForm = $('#module_form');
+	moduleForm.find('[name=cc_context]').change(function(){
 		$(this).parent('form').submit();
-	})
+	});
 });

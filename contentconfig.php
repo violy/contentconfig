@@ -181,9 +181,12 @@ class Contentconfig extends Module
 			{
 				$selected_categories = Tools::getValue($field->name);
 				$selected_categories = $selected_categories ? $selected_categories : array();
+				if (gettype($selected_categories) != 'array')
+					$selected_categories = [$selected_categories];
 				$field->tree['selected_categories'] = $selected_categories;
+				$this->updateFieldValue($field->name, serialize($selected_categories));
 			}
-			if ($field->is_array)
+			else if ($field->is_array)
 				$this->updateFieldValue($field->name, serialize(Tools::getValue($field->name)));
 			else
 				$this->updateFieldValue($field->name, Tools::getValue($field->name));
